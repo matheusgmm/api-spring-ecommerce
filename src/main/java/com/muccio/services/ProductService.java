@@ -5,6 +5,7 @@ import com.muccio.models.dto.ProductDTO;
 import com.muccio.models.entities.Product;
 import com.muccio.repositories.ProductRepository;
 import com.muccio.services.exceptions.ResourceNotFoundException;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -30,12 +31,24 @@ public class ProductService {
         return result.map(ProductDTO::new);
     }
 
-    @Transactional()
+    @Transactional
     public ProductDTO insert(ProductDTO dto) {
         Product entity = new Product();
         copyDtoToEntity(dto, entity);
         entity = productRepository.save(entity);
         return new ProductDTO(entity);
+    }
+
+    @Transactional
+    public ProductDTO update(Long id, ProductDTO dto) {
+        try {
+            Product entity = productRepository.getReferenceById(id);
+            copyDtoToEntity(dto, entity);
+            entity = productRepository.save(entity);
+            return new ProductDTO(entity);
+        } catch (EntityNotFoundException e) {
+            throw new ResourceNotFoundException("Resource Not Found.");
+        }
     }
 
 
