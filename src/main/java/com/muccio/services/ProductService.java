@@ -4,12 +4,15 @@ package com.muccio.services;
 import com.muccio.models.dto.ProductDTO;
 import com.muccio.models.entities.Product;
 import com.muccio.repositories.ProductRepository;
+import com.muccio.services.exceptions.DatabaseException;
 import com.muccio.services.exceptions.ResourceNotFoundException;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
@@ -50,6 +53,19 @@ public class ProductService {
             throw new ResourceNotFoundException("Resource Not Found.");
         }
     }
+
+    @Transactional(propagation = Propagation.SUPPORTS)
+    public void delete(Long id) {
+        if (!productRepository.existsById(id)) {
+            throw new ResourceNotFoundException("Resource Not Found.");
+        }
+        try {
+            productRepository.deleteById(id);
+        } catch (DataIntegrityViolationException e) {
+            throw new DatabaseException("Fail in reference integration.");
+        }
+    }
+
 
 
     private void copyDtoToEntity(ProductDTO dto, Product entity) {
