@@ -2,6 +2,7 @@ package com.muccio.services;
 
 
 import com.muccio.models.dto.ProductDTO;
+import com.muccio.models.dto.ProductMinDTO;
 import com.muccio.models.entities.Product;
 import com.muccio.repositories.ProductRepository;
 import com.muccio.services.exceptions.DatabaseException;
@@ -29,9 +30,9 @@ public class ProductService {
     }
 
     @Transactional(readOnly = true)
-    public Page<ProductDTO> findAll(String name, Pageable pageable) {
+    public Page<ProductMinDTO> findAll(String name, Pageable pageable) {
         Page<Product> result =  productRepository.searchByName(name, pageable);
-        return result.map(ProductDTO::new);
+        return result.map(ProductMinDTO::new);
     }
 
     @Transactional
