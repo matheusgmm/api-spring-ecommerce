@@ -1,8 +1,10 @@
 package com.muccio.services;
 
 
+import com.muccio.models.dto.CategoryDTO;
 import com.muccio.models.dto.ProductDTO;
 import com.muccio.models.dto.ProductMinDTO;
+import com.muccio.models.entities.Category;
 import com.muccio.models.entities.Product;
 import com.muccio.repositories.ProductRepository;
 import com.muccio.services.exceptions.DatabaseException;
@@ -74,5 +76,11 @@ public class ProductService {
         entity.setDescription(dto.getDescription());
         entity.setPrice(dto.getPrice());
         entity.setImgUrl(dto.getImgUrl());
+        entity.getCategories().clear();
+        for (CategoryDTO catDto : dto.getCategories()) {
+            Category cat = new Category();
+            cat.setId(catDto.getId());
+            entity.getCategories().add(cat);
+        }
     }
 }
