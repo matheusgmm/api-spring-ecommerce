@@ -13,8 +13,6 @@ security:
 cors:
   origins: ${CORS_ORIGINS:http://localhost:3000,http://localhost:5173,http://localhost:8100}
 spring-doc:
-  path-to-match:
-    - /api/**/v1/**
-    - /auth/**
   swagger-ui:
     use-root-path: true
+    defaultModelsExpandDepth: -1
