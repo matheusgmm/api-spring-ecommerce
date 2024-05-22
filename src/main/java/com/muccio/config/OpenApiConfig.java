@@ -19,7 +19,7 @@ public class OpenApiConfig {
                     .termsOfService("http://terms-of-service.com.br")
                     .license(
                         new License().name("Apache 2.0")
-                            .url("http://license-url.com.br")
+                            .url("https://www.apache.org/licenses/LICENSE-2.0")
                     )
             );
 
